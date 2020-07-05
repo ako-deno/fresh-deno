@@ -38,7 +38,9 @@ export default function fresh(
   // If-Modified-Since
   if (modifiedSince) {
     const lastModified = resHeaders.get("Last-Modified");
-    if (!lastModified || !(Date.parse(lastModified) <= Date.parse(modifiedSince))) {
+    if (
+      !lastModified || !(Date.parse(lastModified) <= Date.parse(modifiedSince))
+    ) {
       return false;
     }
   }
