@@ -2,13 +2,31 @@
  * Based on https://github.com/jshttp/fresh/blob/master/index.js
  * Copyright(c) 2012 TJ Holowaychuk
  * Copyright(c) 2016-2017 Douglas Christopher Wilson
- * Copyright(c) 2020 Douglas Christian Norrman
+ * Copyright(c) 2020 Christian Norrman
  * MIT Licensed
  */
-const CACHE_CONTROL_NO_CACHE_REGEXP = /(?:^|,)\s*?no-cache\s*?(?:,|$)/;
-const ETAG_SANITIZE_REGEXP = /(W\/| )/g;
 
-// Check freshness of the response using request and response headers.
+/**
+  * Regex to check if no-cache exists in a Cache-Control header.
+  * @constant
+  * @private
+  */
+const CACHE_CONTROL_NO_CACHE_REGEXP = /(?:^|,)\s*?no-cache\s*?(?:,|$)/;
+
+/**
+ * Regex to sanitize ETags within a If-None-Match header.
+ * @constant
+ * @private
+ */
+const NONE_MATCH_SANITIZE_REGEXP = /(W\/| )/g;
+
+/**
+ * Check freshness of the response using request and response headers.
+ * @param {Headers} reqHeaders Server request headers object
+ * @param {Headers} resHeaders Server response headers object
+ *
+ * @returns {boolean}
+ */
 export default function fresh(
   reqHeaders: Headers,
   resHeaders: Headers,
@@ -26,11 +44,15 @@ export default function fresh(
     let etag = resHeaders.get("ETag");
     if (!etag) {
       return false;
+    } else if (etag.startsWith("W/")) {
+      etag = etag.substring(2);
     }
 
-    etag = etag.replace(ETAG_SANITIZE_REGEXP, "");
-    const tokens = noneMatch.replace(ETAG_SANITIZE_REGEXP, "").split(",");
-    if (!tokens.includes(etag)) {
+    const etags = noneMatch
+      .replace(NONE_MATCH_SANITIZE_REGEXP, "")
+      .split(",");
+
+    if (!etags.includes(etag)) {
       return false;
     }
   }
