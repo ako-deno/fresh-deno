@@ -1,6 +1,10 @@
 fresh
 ==========================
 
+[![tag](https://img.shields.io/github/tag/ako-deno/fresh-deno.svg)](https://github.com/ako-deno/fresh-deno/tags)
+![fresh-ci](https://github.com/ako-deno/fresh-deno/workflows/fresh-ci/badge.svg)
+[![HitCount](http://hits.dwyl.com/ako-deno/fresh-deno.svg)](http://hits.dwyl.com/ako-deno/fresh-deno)
+
 HTTP response freshness tester for Deno. Code ported from `https://github.com/jshttp/fresh`.
 
 
